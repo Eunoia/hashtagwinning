@@ -28,7 +28,7 @@ var e = function(error){
 function initialize(lat,long) {
     geocoder = new google.maps.Geocoder();
     var mapOptions = {
-        zoom: 13,
+        zoom: 16,
         center: new google.maps.LatLng(lat, long),
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
