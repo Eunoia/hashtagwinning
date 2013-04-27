@@ -22,9 +22,10 @@
 #popout{
 	font-family: sans-serif;
 	font-size: 200%;
+	padding: 10px;
 	border:1px solid black;
 	z-index: 99;
-	background-color: white;
+	background-color: rgb(182, 137, 255);
 	position: absolute;
 	right: 0px;
 	top: 20%;
@@ -32,9 +33,19 @@
 #popout ul{
 	list-style: none none;
 }
-#popout ul li{
-	width: 100px;
+#popout ul li img{
+	width: 60px;
 }
 .hidden{
 	display: none;
+}
+.marker{
+    background-color: #0f8008;
+    border: 1px solid black;
+}
+.title{
+   font-family: "Arial", sans-serif;
+   font-size: 15px;
+   font-weight: bold;
+   text-align: center;
 }

@@ -24,6 +24,32 @@ var e = function(error){
         alert('Unable to get location');
     }
 }
+function loadParks(){
+    // http://rpc.geocoder.us/service/json?address=1600+Pennsylvania+Ave,+Washington+DC
+    // 37.851543,-122.207708 sibly
+    // 37.86801,-122.309332 kite
+    var parks = [[37.851543,-122.207708],[37.86801,-122.309332]]
+    for(var i =0 ;i<parks.length; i++){
+       var marker = new google.maps.Marker({
+           map: map,
+           icon: 'http://placekitten.com/30/30',
+           position: new google.maps.LatLng(parks[i][0],parks[i][1])
+       });
+
+    }
+}
+function generateInfo(data){
+   text = '<div class="marker">';
+   text += '<div class="title">'+ data.title+'</div>'
+   text += '<img data-badge="go-fly-a-kite.png" class="checkInBtn" src="img/checkin-button.png">'
+   text += '</div>'
+   return text;
+}
+$(function(){
+   $("body").on("click",".checkInBtn",function(){
+       console.log($(this).data("badge"));
+   })
+})
 
 function initialize(lat,long) {
     geocoder = new google.maps.Geocoder();
@@ -51,25 +77,45 @@ var timeout = .3
 
 function codeAddress(place,lat,long) {
 //    document.write(2 + "<br \>");
-   var address = place.address;
-   geocoder.geocode( { 'address': address}, function(results, status) {
-       if (status == google.maps.GeocoderStatus.OK) {
+  var address = place.address;
+  geocoder.geocode( { 'address': address}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
 //            map.setCenter(results[0].geometry.location);
 
-           var marker = new google.maps.Marker({
-               map: map,
-               position: results[0].geometry.location
-           });
+          var infowindow = new google.maps.InfoWindow({
+              content: generateInfo(place)
+          });
+//            alert(generateInfo(place));
+          var icon = 'img/iron.png';
+          if(place.sector == "Hotel"){
+              icon = "img/hotel.png"
+          }
+          if(place.sector == "Dentist"){
+              icon = "img/tooth.png";
+          }
+          if(place.sector == "Restaurant"){
+              icon = "img/resturants.png";
+          }
 
-       } else {
-           if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT)
-           {
-               setTimeout(function() { codeAddress(place,lat,long); }, (timeout * 3));
-           }
+          var marker = new google.maps.Marker({
+              icon: icon,
+              map: map,
+              position: results[0].geometry.location,
+              title: place.title
+          });
+          google.maps.event.addListener(marker, 'click', function() {
+              infowindow.open(map,marker);
+          });
+
+      } else {
+          if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT)
+          {
+              setTimeout(function() { codeAddress(place,lat,long); }, (timeout * 3));
+          }
 
 //            alert("Geocode was not successful for the following reason: " + status);
-       }
-   });
+      }
+  });
 }
 
 
