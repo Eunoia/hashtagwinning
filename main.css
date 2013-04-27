@@ -1,0 +1,13 @@
+.text{
+    width: 100px;
+    height:100px;
+    border: 1px solid black;
+    position: absolute;
+}
+.text2{
+    left: 300px;
+    width: 100px;
+    height:100px;
+    border: 1px solid black;
+    position: absolute;
+}
