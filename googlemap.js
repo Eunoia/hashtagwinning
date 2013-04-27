@@ -34,8 +34,12 @@ function initialize(lat,long) {
     };
     map = new google.maps.Map(document.getElementById('map-canvas'),
         mapOptions);
+
     var marker = new google.maps.Marker({
         map: map,
+        icon: 'me.svg',
+        shadow: 'me.svg',
+        width: '20px',
         position: new google.maps.LatLng(lat, long)
     });
 }
