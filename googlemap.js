@@ -28,7 +28,7 @@ var e = function(error){
 function initialize(lat,long) {
     geocoder = new google.maps.Geocoder();
     var mapOptions = {
-        zoom: 16,
+        zoom: 13,
         center: new google.maps.LatLng(lat, long),
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
@@ -42,22 +42,35 @@ function initialize(lat,long) {
         width: '20px',
         position: new google.maps.LatLng(lat, long)
     });
+   for(var i = 0; i < addresses.length; i++){
+       codeAddress(addresses[i],lat,long);
+   }
 }
 
-function codeAddress(place) {
+var timeout = .3
+
+function codeAddress(place,lat,long) {
 //    document.write(2 + "<br \>");
-    var address = place;
-    geocoder.geocode( { 'address': address}, function(results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
-            map.setCenter(results[0].geometry.location);
-            var marker = new google.maps.Marker({
-                map: map,
-                position: results[0].geometry.location
-            });
-        } else {
-            alert("Geocode was not successful for the following reason: " + status);
-        }
-    });
+   var address = place.address;
+   geocoder.geocode( { 'address': address}, function(results, status) {
+       if (status == google.maps.GeocoderStatus.OK) {
+//            map.setCenter(results[0].geometry.location);
+
+           var marker = new google.maps.Marker({
+               map: map,
+               position: results[0].geometry.location
+           });
+
+       } else {
+           if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT)
+           {
+               setTimeout(function() { codeAddress(place,lat,long); }, (timeout * 3));
+           }
+
+//            alert("Geocode was not successful for the following reason: " + status);
+       }
+   });
 }
+
 
 google.maps.event.addDomListener(window, 'load', load);
